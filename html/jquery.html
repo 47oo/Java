@@ -1,0 +1,207 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <script src="jquery-1.3.1.js" type="text/javascript"></script>
+  <!-- <link type="text/css" rel="stylesheet" href="test.css"/> -->
+  <!-- <script src="demo.js" type="text/javascript"></script> -->
+  <style type="text/css">
+			/*#menu {
+				width: 300px;
+			}
+			.has_children {
+				background: #555;
+				color: #fff;
+				cursor: pointer;
+			}
+			.highlight {
+				color: #fff;
+				background: green;
+			}
+			div {
+				padding: 0px;
+			}
+			div a{
+				background: #888;
+
+				float: left;
+				width: 300px;
+			}
+      a{
+      list-style:none;
+      float:left;
+      display:inline;
+      margin-right:10px;
+      border:1px solid #AAAAAA;
+     }*/
+     #tooltip{
+	      position:absolute;
+	      border:1px solid #ccc;
+	      background:#333;
+	      padding:2px;
+	      display:none;
+  	    color:#fff;
+      }
+      div{
+        padding: 0px;
+      }
+		</style>
+
+</head>
+<body>
+<!-- <div id="div1">demo1.2演示</div>
+<button type="button">隐藏</button> -->
+<!-- <input type="button" value="第1小题" id="btn1"/>
+		<input type="button" value="第2小题" id="btn2"/>
+		<input type="button" value="第3小题" id="btn3"/>
+		<input type="button" value="第4小题" id="btn4"/>
+<div id="menu">
+			<div class="has_children">
+				<span>第1章 jQuery介绍</span>
+				<a>1.1 了解认识Web2.0技术</a>
+				<a>1.2 了解JavaScript库概念</a>
+				<a>1.3 了解常见JavaScript库</a>
+				<a>1.4 简单出略了解jQuery作用</a>
+				<a>1.5 jQuery下载、配置</a>
+				<a>1.6 简单jQuery程序编写</a>
+				<a>1.7 小结</a>
+			</div>
+			<div class="has_children">
+				<span>第2章 jQuery选择器</span>
+				<a>2.1 选择器是什么</a>
+				<a>2.2 jQuery选择器的语法</a>
+				<a>2.3 jQuery选择器使用demo</a>
+				<a>2.4 小结</a>
+			</div>
+		</div>
+    <script>
+    $(document).ready(function(){
+      $("#btn1").click(function() {
+  			$("#menu").css("border", "3px solid red");
+  		});
+      $("#btn2").click(function() {
+        $(".has_children:eq(0)")
+  			.siblings().hide(500);
+
+      });
+      $("#btn3").click(function() {
+  				var a = $(".has_children").find("a").length;
+  				alert("class为has_children中a标签的总个数为：" + a);
+  		});
+      $("#btn4").click(function() {
+					$(".has_children").each(function(i) { //each相当于Java中的for循环语句，主要用于遍历节点元素
+						$(this).find("a:eq(0)").css("background", "#bfa");
+					});
+				});
+    });
+
+    </script> -->
+    <!-- <form id="f" method="post">
+		<table border="1">
+			<tr colspan="4">
+				<td><input type="checkbox" id="c0" >全选/取消<td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" class="c1"></td>
+				<td>s001</td>
+				<td>张三</td>
+				<td>男</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" class="c1"></td>
+				<td>s002</td>
+				<td>王麻子</td>
+				<td>男</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" class="c1"></td>
+				<td>s003</td>
+				<td>李四</td>
+				<td>男</td>
+			</tr>
+		</table>
+	</form>
+  <script>
+    $(document).ready(function(){
+      $("#c0").click(function(){
+        if($(this).attr("checked")){
+          $(".c1").each(function(i){
+        $(this).attr("checked","checked");
+          });
+        }else{
+          $(".c1").each(function(i){
+        $(this).attr("checked","");
+          });
+        }
+      });
+    });
+
+  </script> -->
+  <!-- <a href="C:/Users/hp/Desktop/课后练习/第三章课后作业/答案/images/apple_1_bigger.jpg" class="tooltip" title="苹果 iPod"><img src="C:/Users/hp/Desktop/课后练习/第三章课后作业/答案/images/apple_1.jpg" alt="苹果 iPod" /></a>
+  <script type="text/javascript">
+  //<![CDATA[
+  $(function(){
+  	var x = 10;
+  	var y = 20;
+  	$("a.tooltip").mouseover(function(e){
+  		this.myTitle = this.title;
+  		this.title = "";
+  		var tooltip = "<div id='tooltip'><img src='"+ this.href +"' alt='产品预览图'/><\/div>"; //创建 div 元素
+  		$("body").append(tooltip);	//把它追加到文档中
+  		$("#tooltip")
+  			.css({
+  				"top": (e.pageY+y) + "px",
+  				"left":  (e.pageX+x)  + "px"
+  			}).show("fast");	  //设置x坐标和y坐标，并且显示
+      }).mouseout(function(){
+  		this.title = this.myTitle;
+  		$("#tooltip").remove();	 //移除
+      }).mousemove(function(e){
+  		$("#tooltip")
+  			.css({
+  				"top": (e.pageY+y) + "px",
+  				"left":  (e.pageX+x)  + "px"
+  			});
+  	});
+  })
+  //]]>
+  </script> -->
+<!-- <div>鼠标过来</div>
+<script>
+$(function(){
+  var x = 10;
+  var y = 20;
+  $("div").mouseover(function(e){
+    this.myTitle = this.title;
+    this.title = "";
+    var tooltip = "<div id='tooltip'>我是提示</div>"; //创建 div 元素
+    $("body").append(tooltip);	//把它追加到文档中
+    $("#tooltip")
+      .css({
+        "top": (e.pageY+y) + "px",
+        "left":  (e.pageX+x)  + "px"
+      }).show("fast");	  //设置x坐标和y坐标，并且显示
+    }).mouseout(function(){
+    this.title = this.myTitle;
+    $("#tooltip").remove();	 //移除
+    }).mousemove(function(e){
+    $("#tooltip")
+      .css({
+        "top": (e.pageY+y) + "px",
+        "left":  (e.pageX+x)  + "px"
+      });
+  });
+})
+</script> -->
+id:&nbsp<input type="text" name="id" value="" id="id"/><br>
+name:<input type="text" name="name" value="" id="name"/><br>
+	<input type="button" name="button" value="查询" id="button"/><br>
+	<div></div>
+	<script type="text/javascript">
+		$("#button").click(function(){
+        var id = $("#id").val();
+        var name=$("#name").val();
+        $("div").load("student.xml");
+		});
+	</script>
+</body>
+</html>
