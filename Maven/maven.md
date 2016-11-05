@@ -12,5 +12,36 @@
     - mvn site 生成项目站点信息(site文件夹)
 
   + pom配置文件
-    - 如同类的继承关系,就近原则,就近依赖
+    - 如同类的继承关系,就近原则,就近依赖,声明优先
     - 配置文件中的scope标签
+     > 1.compile:默认编译依赖范围.对于编译,测试,运行三种classpath都有效
+
+     > 2.test:测试依赖范围.只对于测试classpath有效,只对测试代码有效
+
+     > 3.provided:已提供依赖范围.对于编译,测试的classpath的时候都有效,但对于运行无效.因为已经由容器提供.例如servlet-api,打包的时候这个包不会打进去.(tomcat容器为例)
+
+     > 4.runtime: 运行时提供.例如jdbc驱动.
+
+     > compile,runtime打包会搭进去,test,provided打包不会打进去
+
+  + Maven聚合和继承
+    > 主要是可以起到公共配置文件的抽取作用,jar包的统一管理
+
+      - 1.dependencyManagement中定义的依赖子module不会共享(只有子模块配置的时候才会被引用)
+      - 2.depnedencies中定义的依赖子module可以共享
+      - 3.jar包的统一管理,把jar抽取到parent中
+        - 继承:
+          > 子module(模组)继承父类(其实就是子pom.xml配置文件继承父pom.xml)在子pom的配置
+              <parent>
+              <groupId>com.cqupt.hh</groupId>
+              <artifactId>parent</artifactId>
+              <version>0.0.1-SNAPSHOT</version>
+              <relativePath>../parent</relativePath>
+              </parent>
+
+        - 聚合
+          > 父module将子module进行组合
+              <modules>
+            		<module>hello1Maven</module><--填子项目pom文件的路径-->
+            		<module>maven1</module>
+            	</modules>
