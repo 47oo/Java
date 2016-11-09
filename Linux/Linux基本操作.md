@@ -74,3 +74,28 @@
         如果是接在第二个字以后的,就会变成[文件补全]的功能.但是在某些特殊的指令低下,文件补齐的功能可能会变成[参数/选项补齐]
 
         ![](/images/tabdate.png)
+
+      - ctrl-c按键
+        > 当想让程序停掉的时候,可以使用这个按键.其目的就是中断当前的程序.
+
+      - Ctrl-d按键
+        > ctrl-d通常代表着:[键盘输入结束[end of file,EOF 或end of input]的意思,另外,他也相当于exit
+
+      - [shift]+[pageup]/[pagedown]
+        > 当在纯文本中执行某些命令,但是这时的输出讯息相当多的时候秒就可以使用shift+pageup或者pagedown来翻页
+
+    + 错误信息的查询
+      > 当下达错误指令的时候,可以藉由屏幕上面的显示的错误的信息来了解自己的问题点.
+
+      ![](/images/wrong.png)
+
+    + 帮助指令
+      - 指令 --help
+        > 使用该指令会大体了解该指令的一些基本操作
+
+      - man 指令
+        > man是manyal(操作说明)的简写.
+
+        ![](/images/man1.png)
+        ![](/images/man2.png)
+        ![](/images/man3.png)
