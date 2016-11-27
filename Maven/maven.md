@@ -196,4 +196,4 @@
   **将自己仓库下面的文件夹把xxx.last
   updated文件删掉即可,当然也有可能是中央仓库没有此文件,需要自己上传到nexus上面**
 
-  相关配置博文http://gouyc.blog.51cto.com/1594451/1827069
+  相关配置博文:http://gouyc.blog.51cto.com/1594451/1827069
