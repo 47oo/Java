@@ -144,50 +144,50 @@
   > sharding通过将数据集分布于多个也称作分片(shard)的节点上来降低单节点的访问压力。每个分片都是一个独立的数据库，所有的分片组合起来构成一个逻辑上的完整意义的数据库。因此，分片机制降低了每个分片的数据操作量及需要存储的数据量
 
   ![](/images/mongodb3.jpg)
-      A。shards:分片，即数据结点，存储数据和执行计算。为了保证高可用和数据一致性，生产环境中shards应该做成
-      replicasets(防止丢失数据)。集群中有一个primary shards，执行非分片的任务。
-      B。mongos(query routers):查询路由，负责client的连接，并把任务分给shards，然后收集结果。一个集群中可以有多个query routers(replica sets)，以分担客户端请求(负载均衡)。
-      C。config server:配置服务器。保存了集群的元数据(比如数据放在哪个shards上)，query router通过config server中的配置信 息决定把任务分配到哪个shards上。从3.2开始，config servers可以做成replica sets
+        A。shards:分片，即数据结点，存储数据和执行计算。为了保证高可用和数据一致性，生产环境中shards应该做成
+        replicasets(防止丢失数据)。集群中有一个primary shards，执行非分片的任务。
+        B。mongos(query routers):查询路由，负责client的连接，并把任务分给shards，然后收集结果。一个集群中可以有多个query routers(replica sets)，以分担客户端请求(负载均衡)。
+        C。config server:配置服务器。保存了集群的元数据(比如数据放在哪个shards上)，query router通过config server中的配置信 息决定把任务分配到哪个shards上。从3.2开始，config servers可以做成replica sets
 
-      mongodb的shard功能实现于collection级别，但若要在collection上启动shard，还需要事先其相关的数据库上启用之。在数据库上启用shard功能后，MongoDB会为其指定一个主shard。
+        mongodb的shard功能实现于collection级别，但若要在collection上启动shard，还需要事先其相关的数据库上启用之。在数据库上启用shard功能后，MongoDB会为其指定一个主shard。
 
     - 配置config Server
       - 采用副本集的形式
       config1
-            mongod --dbpath /home/mongodb/shares/configsvr/config1/data/db --configsvr --replSet jackshare --port 28000 --fork --logpath /home/mongodb/shares/configsvr/config1/log/configsvr.log --bind_ip 120.77.22.187
-            config2
-            mongod --dbpath /home/mongodb/shares/configsvr/config2/data/db --configsvr --replSet jackshare --port 28001 --fork --logpath /home/mongodb/shares/configsvr/config2/log/configsvr.log --bind_ip 120.77.22.187
-            config3
-            mongod --dbpath /home/mongodb/shares/configsvr/config3/data/db --configsvr --replSet jackshare --port 28002 --fork --logpath /home/mongodb/shares/configsvr/config3/log/configsvr.log --bind_ip 120.77.22.187
+              mongod --dbpath /home/mongodb/shares/configsvr/config1/data/db --configsvr --replSet jackshare --port 28000 --fork --logpath /home/mongodb/shares/configsvr/config1/log/configsvr.log --bind_ip 120.77.22.187
+              config2
+              mongod --dbpath /home/mongodb/shares/configsvr/config2/data/db --configsvr --replSet jackshare --port 28001 --fork --logpath /home/mongodb/shares/configsvr/config2/log/configsvr.log --bind_ip 120.77.22.187
+              config3
+              mongod --dbpath /home/mongodb/shares/configsvr/config3/data/db --configsvr --replSet jackshare --port 28002 --fork --logpath /home/mongodb/shares/configsvr/config3/log/configsvr.log --bind_ip 120.77.22.187
 
     - 副本集初始化:
-          rs.initiate({"_id":"jackshare",configsvr:true,members:[{"_id":1,host:"120.77.22.187:28000"},{"_id":2,host:"120.77.22.187:28001"},{"_id":3,host:"120.77.22.187:28002"}]})
-          rs.status()
+            rs.initiate({"_id":"jackshare",configsvr:true,members:[{"_id":1,host:"120.77.22.187:28000"},{"_id":2,host:"120.77.22.187:28001"},{"_id":3,host:"120.77.22.187:28002"}]})
+            rs.status()
 
     - 配置mongos路由
-          mongos --configdb jackshare/120.77.22.187:28000,120.77.22.187:28001,120.77.22.187:28002 --fork --logpath /home/mongodb/shares/mongos/log/mongos.log --bind_ip 120.77.22.187 --port 30000
+            mongos --configdb jackshare/120.77.22.187:28000,120.77.22.187:28001,120.77.22.187:28002 --fork --logpath /home/mongodb/shares/mongos/log/mongos.log --bind_ip 120.77.22.187 --port 30000
 
     - 添加分片到集群
-          sh.addShard("mongodbSet-jack/120.77.22.187:27006")
-          sh.status()观察分片状态
+            sh.addShard("mongodbSet-jack/120.77.22.187:27006")
+            sh.status()观察分片状态
     - 设置数据库分片
       > 在设置集合分片之前,必须设置分片的数据库.链接mongos:
-          mongo --host <hostname of machine running mongos> --port <port mongos listens on>
-          执行：
-          use daetabase
-          sh.enableSharding("<database>")或者db.runCommand( { enableSharding: <database> } )
+            mongo --host <hostname of machine running mongos> --port <port mongos listens on>
+            执行：
+            use daetabase
+            sh.enableSharding("<database>")或者db.runCommand( { enableSharding: <database> } )
 
       - 设置集合分片
-            1)	确定集合的shard key。如果集合已经有数据，那么在shard key上创建index。如果没有数据，集群会自动为shard key创建索引。
-            用字段索引分键
-            用字段hash分键
-            2)将集合加入分片
-            进入到admin库，use admin
-            sh.shardCollection("<database>.<collection>", shard-key-pattern)
-            如：
-            sh.shardCollection("records.people", { "zipcode": 1, "name": 1 } )  shard key 为zipcode，如果有相同的zipcode再根据name来分
-            sh.shardCollection("people.addresses", { "state": 1, "_id": 1 } )      同上
-            sh.shardCollection("assets.chairs", { "type": 1, "_id": 1 } )       同上
-            sh.shardCollection("events.alerts", { "_id": "hashed" } )           hash分片
+              1)	确定集合的shard key。如果集合已经有数据，那么在shard key上创建index。如果没有数据，集群会自动为shard key创建索引。
+              用字段索引分键
+              用字段hash分键
+              2)将集合加入分片
+              进入到admin库，use admin
+              sh.shardCollection("<database>.<collection>", shard-key-pattern)
+              如：
+              sh.shardCollection("records.people", { "zipcode": 1, "name": 1 } )  shard key 为zipcode，如果有相同的zipcode再根据name来分
+              sh.shardCollection("people.addresses", { "state": 1, "_id": 1 } )      同上
+              sh.shardCollection("assets.chairs", { "type": 1, "_id": 1 } )       同上
+              sh.shardCollection("events.alerts", { "_id": "hashed" } )           hash分片
       - 观察chunk的平衡
-            Chunks：理解MongoDB分片机制的关键是理解Chunks。mongodb不是一个分片上存储一个区间，而是每个分片包含多个区间，这每个区间就是一个块。
+              Chunks：理解MongoDB分片机制的关键是理解Chunks。mongodb不是一个分片上存储一个区间，而是每个分片包含多个区间，这每个区间就是一个块。
