@@ -142,7 +142,7 @@
 
 + MongoDB Sharding集群
   > sharding通过将数据集分布于多个也称作分片(shard)的节点上来降低单节点的访问压力。每个分片都是一个独立的数据库，所有的分片组合起来构成一个逻辑上的完整意义的数据库。因此，分片机制降低了每个分片的数据操作量及需要存储的数据量
-
+  + 集群的时候分片要配置shnardsvr=true
   ![](/images/mongodb3.jpg)
         A。shards:分片，即数据结点，存储数据和执行计算。为了保证高可用和数据一致性，生产环境中shards应该做成
         replicasets(防止丢失数据)。集群中有一个primary shards，执行非分片的任务。
